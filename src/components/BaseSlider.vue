@@ -1,16 +1,47 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { useCounterStore } from '@/stores/counter';
+import { onMounted, ref, watch } from 'vue';
 
+
+defineProps({});
+defineEmits({})
+defineExpose({
+  hoge() {
+    return 'a';
+  }
+})
+
+// Composables
+const store = useCounterStore()
+
+// LocalState
 const progress = ref(40);
+
+// functions
+function hoge() {
+  console.log('hoge');
+}
+
+// watches
+watch(progress, () => {
+  console.log('yay', store.$state);
+})
+
+// lifeCycles
+onMounted(() => {
+  hoge();
+})
 
 </script>
 
 <template>
   <input
-    type="range"
-    min="0"
-    max="100"
+    v-if="true"
     v-model="progress"
-    class="range" />
+    class="range"
+    max="100"
+    min="0"
+    type="range"
+  >
 </template>
 
