@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCounterStore } from '@/stores/counter';
-import { onMounted, ref, watch } from 'vue';
-
+import { myDayJs } from '@/utils/myDayJs';
 
 defineProps({});
 defineEmits({})
@@ -16,20 +15,24 @@ const store = useCounterStore()
 
 // LocalState
 const progress = ref(40);
-
+useRefHistory(progress)
 // functions
 function hoge() {
+  // eslint-disable-next-line no-console
   console.log('hoge');
 }
 
 // watches
 watch(progress, () => {
+  // eslint-disable-next-line no-console
   console.log('yay', store.$state);
 })
 
 // lifeCycles
 onMounted(() => {
   hoge();
+  // eslint-disable-next-line no-console
+  console.log('now', myDayJs.now())
 })
 
 </script>
