@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import { myDayJs } from '@/utils/myDayJs';
-
-
-const model = defineModel<number>({ default: 0 })
-
-onMounted(() => {
-    // eslint-disable-next-line no-console
-  console.log('now', myDayJs.now())
-})
+const model = defineModel<number | string>({ required: true })
 </script>
 
 <template>
@@ -17,8 +9,8 @@ onMounted(() => {
       range text-#D2B48C [--range-progress:#D2B48C] [--range-bg:black] [--range-thumb:black]
       border border-black border-dashed w-full rounded-lg
     "
-    max="100"
-    min="0"
+    :max="100"
+    :min="0"
     style="border-image: repeating-linear-gradient(
       to right, #6b7280 0, #6b7280 10px, transparent 10px, transparent 20px) 1; z-index: 1px;"
     type="range"

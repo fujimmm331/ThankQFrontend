@@ -3,7 +3,14 @@ import ThSlider from '@/components/ThSlider.vue'
 import { ref } from "vue";
 import { RouterLink } from 'vue-router';
 
-const progress = ref(100);
+const progress = ref<number>(100);
+const router = useRouter();
+
+watch(progress, async (newProgress) => {
+  if (5 > newProgress) {
+    await router.push('/messages');
+  }
+});
 </script>
 
 <template>

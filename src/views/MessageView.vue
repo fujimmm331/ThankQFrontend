@@ -7,7 +7,11 @@ import { RouterLink } from 'vue-router';
   <BaseSection
     class="h-full p-6 flex flex-col gap-4"
   >
-    ここにメッセージが入ります
+    <h1>ゲスト様へ</h1>
+    <p>
+      圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。
+      圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。圧倒的感謝です。
+    </p>
     <RouterLink to="/questions">
       次へ
     </RouterLink>
