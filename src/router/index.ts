@@ -1,13 +1,25 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import MessageView from '@/views/MessageView.vue'
+import QuestionsView from '@/views/QuestionsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
       component: HomeView,
+    },
+    {
+      path: '/messages',
+      name: 'messagePage',
+      component: MessageView,
+    },
+    {
+      path: '/questions',
+      name: 'questionPage',
+      component: QuestionsView,
     },
     // {
     //   path: '/about',

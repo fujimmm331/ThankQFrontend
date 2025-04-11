@@ -16,7 +16,7 @@ export default defineConfig({
       imports: [
         'vue',
         'vue-router',
-        '@vueuse/core', // ← ここで VueUse を追加！
+        '@vueuse/core',
       ],
     }),
   ],
