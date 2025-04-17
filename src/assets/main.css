@@ -35,5 +35,11 @@
   --depth: 0;
   --noise: 0;
   --Dumbo: #D2B48C;
+
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 18px;
+  --text-lg: 20px;
+  --text-xl: 22px;
 }
 
