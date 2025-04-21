@@ -6,6 +6,7 @@ import BaseRadio from '@/components/Common/BaseRadio/BaseRadio.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
+import ThLetter from '@/components/messages/Letter/ThLetter.vue';
 
 const btns = [
   'block',
@@ -33,6 +34,7 @@ function onClickPrevBtn() {
   <BaseSection
     class="h-full p-6 flex flex-col gap-4"
   >
+    <ThLetter body="キミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテル" />
     <BaseHeading tag="h1">
       クイズに答える
     </BaseHeading>
