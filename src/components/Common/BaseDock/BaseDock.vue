@@ -64,7 +64,7 @@ async function to(path: string) {
       :current-path
       label="クイズに答える"
       to-path="/questions"
-      @click="to('/questions')"
+      @click="to('/questions/welcome')"
     >
       <svg
         class="size-6"
