@@ -13,7 +13,8 @@ const btnColor = computed(() => {
     'info': 'btn-info',
     'success': 'btn-success',
     'warning': 'btn-warning',
-    'error': 'btn-error'
+    'error': 'btn-error',
+    'neutral': 'btn-neutral'
   }
   return colorClass[props.color]
 })
