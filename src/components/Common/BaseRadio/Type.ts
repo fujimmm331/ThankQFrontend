@@ -1,3 +1,4 @@
 export interface BaseRadioProps {
-  label: string
+  label: string,
+  value: boolean | number | string
 };
