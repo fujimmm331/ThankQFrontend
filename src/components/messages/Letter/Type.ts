@@ -1,3 +1,5 @@
 export interface ThLetterProps {
-  body: string
+  to?: string,
+  body: string,
+  from: string,
 };

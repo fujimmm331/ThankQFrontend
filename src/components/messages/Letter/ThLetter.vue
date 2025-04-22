@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import MessageRow from '../MessageRow/MessageRow.vue';
 import MessageRowBody from '../MessageRow/MessageRowBody.vue';
 import MessageRowFrom from '../MessageRow/MessageRowFrom.vue';
 import MessageRowTitle from '../MessageRow/MessageRowTitle.vue';
@@ -27,8 +28,8 @@ const lines = computed(() => {
 
 <template>
   <div class="th-letter">
-    <MessageRowTitle>
-      先生へ
+    <MessageRowTitle v-if="to">
+      {{ to }}へ
     </MessageRowTitle>
     <MessageRowBody
       v-for="line, index in lines"
@@ -36,6 +37,7 @@ const lines = computed(() => {
     >
       {{ line }}
     </MessageRowBody>
-    <MessageRowFrom>藤村和弥</MessageRowFrom>
+    <MessageRowFrom>{{ from }}</MessageRowFrom>
+    <MessageRow />
   </div>
 </template>
