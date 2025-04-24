@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
+import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
 import BaseRadioGroup from '@/components/Common/BaseRadioGroup/BaseRadioGroup.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
+import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
 
 const selectItem = ref<number | string | boolean>()
@@ -28,54 +30,70 @@ const radioItems = ref([
 </script>
 
 <template>
-  <BaseSection
-    class="h-full p-6 flex flex-col"
-  >
-    <BaseHeading
-      tag="h1"
+  <BaseSection class="flex flex-col">
+    <BaseStack
+      component="div"
+      grow
     >
-      クイズに答える
-    </BaseHeading>
-    <BaseStepper
-      class="mb-4 min-h-10"
-      :current-step="1"
-      :step-length="5"
-    />
-
-    <div class="flex-grow-1 flex flex-col justify-end gap-4">
-      <div class="flex-grow-1 flex items-center">
-        <BaseHeading
-          class="py-2"
-          tag="h3"
-        >
-          新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？
-        </BaseHeading>
-      </div>
-      <BaseRadioGroup
-        v-model="selectItem"
-        :radio-items
+      <BaseHeading
+        tag="h1"
+      >
+        クイズに答える
+      </BaseHeading>
+      <BaseStepper
+        class="min-h-10 mt-1"
+        :current-step="1"
+        :step-length="5"
       />
-      <div class="flex gap-3 items-center">
-        <BaseBtn
-          class="w-30"
-          color="secondary"
-          size="lg"
-          @click="$router.push({name: 'questionAnswerPage', params: {
-            id: 1
-          }})"
-        >
-          戻る
-        </BaseBtn>
 
-        <BaseBtn
-          class="flex-grow-1"
-          color="primary"
-          size="xl"
-          @click="$router.push({name: 'questionConfirmPage'})"
+      <BaseStack
+        class="flex-grow-1 justify-end"
+        component="div"
+        gap="md"
+      >
+        <BaseCenter
+          :col="false"
+          component="div"
+          grow
         >
-          次へ
-        </BaseBtn>
-      </div>
-    </div>
+          <BaseHeading
+            class="py-8"
+            tag="h3"
+          >
+            新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？
+          </BaseHeading>
+        </BaseCenter>
+        <BaseRadioGroup
+          v-model="selectItem"
+          :radio-items
+        />
+
+        <BaseCenter
+          :col="false"
+          component="div"
+          gap="md"
+        >
+          <BaseBtn
+            class="w-30"
+            color="secondary"
+            size="lg"
+            @click="$router.push({name: 'questionAnswerPage', params: {
+              id: 1
+            }})"
+          >
+            戻る
+          </BaseBtn>
+
+          <BaseBtn
+            class="flex-grow-1"
+            color="primary"
+            size="xl"
+            @click="$router.push({name: 'questionConfirmPage'})"
+          >
+            次へ
+          </BaseBtn>
+        </BaseCenter>
+      </BaseStack>
+    </BaseStack>
   </BaseSection>
 </template>
