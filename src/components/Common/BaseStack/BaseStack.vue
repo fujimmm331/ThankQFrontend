@@ -3,7 +3,8 @@ import type { ThankQSizeType } from '@/themes/size';
 import type { BaseStackProps } from './Type';
 
 const props = withDefaults(defineProps<BaseStackProps>(), {
-  col: true
+  col: true,
+  grow: false
 });
 
 const gap = computed(() => {
@@ -22,13 +23,20 @@ const flexCol = computed(() => {
   if (!props.col) return ''
   return 'flex-col'
 })
+
+const flexGrow = computed(() => {
+  if (props.grow) {
+    return 'flex-grow-1'
+  }
+  return ''
+})
 </script>
 
 <template>
   <component
     :is="component"
     class="flex"
-    :class="[gap, flexCol]"
+    :class="[gap, flexCol, flexGrow]"
   >
     <slot />
   </component>
