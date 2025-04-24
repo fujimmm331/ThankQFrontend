@@ -16,7 +16,7 @@ async function to(path: string) {
 
 <template>
   <div class="dock w-full border-t-1 border-[#D1D5DB]">
-    <BaseDockButton
+    <!-- <BaseDockButton
       :current-path
       label="写真を共有する"
       to-path="/share"
@@ -36,7 +36,7 @@ async function to(path: string) {
           stroke-linejoin="round"
         />
       </svg>
-    </BaseDockButton>
+    </BaseDockButton> -->
 
     <BaseDockButton
       :current-path

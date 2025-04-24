@@ -12,9 +12,17 @@ const btnColor = computed(() => {
     'info': 'text-info',
     'success': 'text-success',
     'warning': 'text-warning',
-    'error': 'text-error'
+    'error': 'text-error',
+    'neutral': 'text-neutral',
+    'base-100': 'text-base-100',
+    'base-200': 'text-base-200',
+    'base-300': 'text-base-300',
   }
   return props.color ? colorClass[props.color] : 'text-neutral'
+})
+
+const fontWeight = computed(() => {
+  return props.bold ? 'font-bold' : ''
 })
 
 
@@ -23,7 +31,7 @@ const btnColor = computed(() => {
 <template>
   <p
     class="tracking-wide text-base"
-    :class="[btnColor]"
+    :class="[btnColor, fontWeight]"
   >
     <slot />
   </p>

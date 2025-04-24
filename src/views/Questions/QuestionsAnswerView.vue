@@ -55,7 +55,7 @@ const radioItems = ref([
         v-model="selectItem"
         :radio-items
       />
-      <div class="flex gap-4 items-center">
+      <div class="flex gap-3 items-center">
         <BaseBtn
           class="w-30"
           color="secondary"
@@ -71,7 +71,7 @@ const radioItems = ref([
           class="flex-grow-1"
           color="primary"
           size="xl"
-          @click="$router.push({name: 'questionEndPage'})"
+          @click="$router.push({name: 'questionConfirmPage'})"
         >
           次へ
         </BaseBtn>
