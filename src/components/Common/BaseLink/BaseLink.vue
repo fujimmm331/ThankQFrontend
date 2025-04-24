@@ -13,7 +13,10 @@ const btnColor = computed(() => {
     'success': 'link-success',
     'warning': 'link-warning',
     'error': 'link-error',
-    'neutral': 'link-neutral'
+    'neutral': 'link-neutral',
+    'base-100': 'link-base-100',
+    'base-200': 'link-base-200',
+    'base-300': 'link-base-300',
   }
   return props.color ? colorClass[props.color] : 'link-neutral'
 })
