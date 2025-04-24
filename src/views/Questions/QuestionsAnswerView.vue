@@ -49,7 +49,7 @@ const radioItems = ref([
       <BaseStack
         class="flex-grow-1 justify-end"
         component="div"
-        gap="md"
+        gap="xl"
       >
         <BaseCenter
           :col="false"
