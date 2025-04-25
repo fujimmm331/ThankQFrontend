@@ -7,12 +7,12 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/:token',
       name: 'home',
       component: HomeView,
     },
     {
-      path: '/messages',
+      path: '/:token/messages',
       name: 'messagePage',
       component: MessageView,
     },
