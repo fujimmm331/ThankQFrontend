@@ -63,6 +63,7 @@ autoScroll()
       :key="index"
       ref="carouselItems"
       :img-item
+      :is-loading
     />
   </div>
 </template>

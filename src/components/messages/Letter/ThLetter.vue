@@ -24,20 +24,32 @@ const lines = computed(() => {
 
   return lines
 })
+
+const skeleton = computed(() => {
+  if (props.isLoading) {
+    return 'skeleton'
+  }
+  return ''
+})
 </script>
 
 <template>
-  <div class="th-letter">
-    <MessageRowTitle v-if="to">
-      {{ to }}へ
-    </MessageRowTitle>
-    <MessageRowBody
-      v-for="line, index in lines"
-      :key="index"
-    >
-      {{ line }}
-    </MessageRowBody>
-    <MessageRowFrom>{{ from }}</MessageRowFrom>
-    <MessageRow />
+  <div
+    class="th-letter min-h-100"
+    :class="[skeleton]"
+  >
+    <template v-if="!isLoading">
+      <MessageRowTitle v-if="to">
+        {{ to }}へ
+      </MessageRowTitle>
+      <MessageRowBody
+        v-for="line, index in lines"
+        :key="index"
+      >
+        {{ line }}
+      </MessageRowBody>
+      <MessageRowFrom>{{ from }}</MessageRowFrom>
+      <MessageRow />
+    </template>
   </div>
 </template>
