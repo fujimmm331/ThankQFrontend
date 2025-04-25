@@ -2,19 +2,25 @@
 import BaseCarousel from '@/components/Common/BaseCarousel/BaseCarousel.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
 import ThLetter from '@/components/messages/Letter/ThLetter.vue';
+import { useMessage } from '@/composables/useMessage';
+import { useUserToken } from '@/composables/useUserToken';
+import { useMessageStore } from '@/stores/messageStore';
 
-const imgList = ref([
-  {
-    url: 'https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp',
-  },
-  {
-    url: 'https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp',
-  },
-  {
-    url: 'https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp',
-  }
-])
+const { reloadMessage, isLoading } = useMessage();
+const store = useMessageStore();
+const token = useUserToken();
 
+const imgList = computed(() => {
+  if (!token.value) return [];
+
+  return store.messages[token.value]?.[0]?.guest_photos.map((item) => {
+    return { url: item.photo_path }
+  })
+})
+
+onMounted(async () => {
+  await reloadMessage(token.value);
+})
 </script>
 
 <template>
@@ -23,17 +29,20 @@ const imgList = ref([
   >
     <div>
       <ThLetter
-        body="キミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテル"
+        v-for="item in store.messages[token]"
+        :key="item.id"
+        :body="item.message"
         from="藤村和弥"
-        to="センセイ"
-      />
-      <ThLetter
-        body="キミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテルキミヲアイシテル"
-        from="久賀鈴香"
+        :is-loading
+        :to="item.name"
       />
     </div>
     <div>
-      <BaseCarousel :img-list />
+      <BaseCarousel
+        v-if="imgList"
+        :img-list
+        :is-loading
+      />
     </div>
   </BaseSection>
 </template>
