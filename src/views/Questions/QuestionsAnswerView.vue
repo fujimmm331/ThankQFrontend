@@ -6,8 +6,10 @@ import BaseRadioGroup from '@/components/Common/BaseRadioGroup/BaseRadioGroup.vu
 import BaseSection from '@/components/Common/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
+import { useQuiz } from '@/composables/useQuiz';
 import { useQuizStore } from '@/stores/quizStore';
 
+const { saveToStorage } = useQuiz();
 const store = useQuizStore();
 const route = useRoute();
 const router = useRouter();
@@ -82,6 +84,10 @@ async function onPrev() {
     name: 'questionWelcomePage'
   })
 }
+
+watch(currentQuiz, () => {
+  saveToStorage();
+});
 </script>
 
 <template>

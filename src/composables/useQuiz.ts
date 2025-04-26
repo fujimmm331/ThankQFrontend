@@ -6,6 +6,7 @@ export function useQuiz() {
   const store = useQuizStore()
   const _isLoading = ref(false)
   const _errorMessage = ref('');
+  const storage = useSessionStorage<Quiz[]>('thankQ/quiz-answer', [])
 
   return {
     isLoading: computed(() => {
@@ -13,6 +14,10 @@ export function useQuiz() {
     }),
     reloadQuiz: async () => {
       if (store.quizzes.length > 0) return;
+      if (storage.value.length > 0) {
+        store.setQuizzes(storage.value);
+        return
+      }
 
       try {
         const response = await getQuizzes();
@@ -26,6 +31,9 @@ export function useQuiz() {
     },
     errorMessage: computed(() => {
       return _errorMessage.value
-    })
+    }),
+    saveToStorage: () => {
+      storage.value = store.quizzes;
+    }
   }
 }
