@@ -13,13 +13,13 @@ export function createQuestionPage(): RouteRecordRaw[] {
       component: QuestionsView,
       redirect: (to) => {
         return {
-          name: 'questionStartPage', params: { token: to.params.token }
+          name: 'questionWelcomePage', params: { token: to.params.token }
         }
       },
       children: [
         {
           path: 'welcome',
-          name: 'questionStartPage',
+          name: 'questionWelcomePage',
           component: QuestionsWelcomeView
         },
         {
