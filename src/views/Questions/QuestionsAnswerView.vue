@@ -11,6 +11,7 @@ import { useQuizStore } from '@/stores/quizStore';
 const store = useQuizStore();
 const route = useRoute();
 const router = useRouter();
+const sectionRef = useTemplateRef('baseSection');
 
 const id = computed(() => {
   const _id = Number(route.params.id)
@@ -56,6 +57,7 @@ async function onNext() {
         id: nextId
       }
     })
+    sectionRef.value?.scrollToTop();
     return;
   }
 
@@ -72,6 +74,7 @@ async function onPrev() {
         id: prevId
       }
     })
+    sectionRef.value?.scrollToTop();
     return;
   }
 
@@ -82,7 +85,10 @@ async function onPrev() {
 </script>
 
 <template>
-  <BaseSection class="flex flex-col">
+  <BaseSection
+    ref="baseSection"
+    class="flex flex-col"
+  >
     <BaseStack
       component="div"
       grow
@@ -113,7 +119,7 @@ async function onPrev() {
             class="py-8"
             tag="h3"
           >
-            {{ currentQuiz.question }}
+            Q. {{ currentQuiz.question }}
           </BaseHeading>
         </BaseCenter>
         <BaseRadioGroup
