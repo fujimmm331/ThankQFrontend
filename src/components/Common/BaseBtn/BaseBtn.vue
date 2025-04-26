@@ -68,6 +68,10 @@ const btnBehavior = computed(() => {
   <button
     :class="['btn', btnSize, btnColor, btnVariant, btnBehavior]"
   >
+    <span
+      v-if="loading"
+      class="loading loading-spinner"
+    />
     <slot />
   </button>
 </template>
