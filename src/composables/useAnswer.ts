@@ -1,8 +1,10 @@
 import { postAnswer, type PostAnswerParamsType } from "@/services/postAnswer";
+import { useGuestStore } from "@/stores/guestStore";
 import { useQuizStore } from "@/stores/quizStore";
 
 export function useQuizAnswer() {
   const store = useQuizStore()
+  const guestStore = useGuestStore();
   const _isLoading = ref(false)
   const _errorMessage = ref('');
 
@@ -17,7 +19,7 @@ export function useQuizAnswer() {
 
     return {
       quiz_choice_ids: quizChoiceIds,
-      guest_id: 1,
+      guest_id: guestStore.guest?.id ?? -1,
     }
   }
 
@@ -28,7 +30,11 @@ export function useQuizAnswer() {
     sendAnswer: async () => {
       _isLoading.value = true
       try {
-        await postAnswer(_createAnswerParams());
+        const params = _createAnswerParams();
+        if (params.guest_id === -1) {
+          throw Error('ゲストの情報が取得できてないようです。一度画面をリロードしてください。')
+        }
+        await postAnswer(params);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -37,9 +43,7 @@ export function useQuizAnswer() {
         _errorMessage.value = _error.message;
       }
       finally {
-        setTimeout(() => {
-          _isLoading.value = false
-        }, 4000)
+        _isLoading.value = false
       }
     },
     errorMessage: computed(() => {

@@ -11,7 +11,7 @@ import { useQuizAnswer } from '@/composables/useAnswer';
 import { useQuizStore } from '@/stores/quizStore';
 
 const store = useQuizStore();
-const { isLoading, sendAnswer } = useQuizAnswer()
+const { isLoading, sendAnswer, errorMessage } = useQuizAnswer()
 const router = useRouter();
 
 const results = computed(() => {
@@ -39,7 +39,9 @@ const btnText = computed(() => {
 
 async function onSend() {
   await sendAnswer();
-  await router.push({name: 'questionEndPage'})
+  if (!errorMessage.value) {
+    await router.push({name: 'questionEndPage'})
+  }
 }
 </script>
 
@@ -57,9 +59,10 @@ async function onSend() {
       <BaseCard shadow="xs">
         <BaseStack component="ul">
           <ConfirmListItem
-            v-for="result in results"
+            v-for="result, index in results"
             :key="result.id"
             :answer-of-user="result.answer ?? ''"
+            :no-border="results.length - 1 === index"
             :question="result.question"
           />
         </BaseStack>
@@ -71,13 +74,13 @@ async function onSend() {
       </BaseText>
 
       <BaseStack
-        class="items-center"
+        class="items-center sticky rounded-xl bottom-0 bg-base-100"
         :col="false"
         component="div"
         gap="md"
       >
         <BaseBtn
-          class="w-30"
+          class="w-30 shadow-xl"
           color="secondary"
           :disabled="isLoading"
           size="lg"
@@ -89,7 +92,7 @@ async function onSend() {
         </BaseBtn>
 
         <BaseBtn
-          class="flex-grow-1"
+          class="flex-grow-1 shadow-xl"
           color="primary"
           :loading="isLoading"
           size="xl"
