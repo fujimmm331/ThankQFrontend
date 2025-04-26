@@ -3,18 +3,23 @@ import QuestionsWelcomeView from '@/views/Questions/QuestionsWelcomeView.vue'
 import QuestionsAnswerView from '@/views/Questions/QuestionsAnswerView.vue'
 import QuestionsEndView from '@/views/Questions/QuestionsEndView.vue'
 import QuestionsConfirmView from '@/views/Questions/QuestionsConfirmView.vue';
+import type { RouteRecordRaw } from 'vue-router';
 
-export function createQuestionPage() {
+export function createQuestionPage(): RouteRecordRaw[] {
   return [
     {
-      path: '/questions',
+      path: '/:token/questions',
       name: 'questionPage',
       component: QuestionsView,
-      redirect: '/questions/welcome',
+      redirect: (to) => {
+        return {
+          name: 'questionWelcomePage', params: { token: to.params.token }
+        }
+      },
       children: [
         {
           path: 'welcome',
-          name: 'questionStartPage',
+          name: 'questionWelcomePage',
           component: QuestionsWelcomeView
         },
         {

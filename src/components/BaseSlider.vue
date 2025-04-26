@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useCounterStore } from '@/stores/counter';
 import { myDayJs } from '@/utils/myDayJs';
 
 defineProps({});
@@ -11,7 +10,7 @@ defineExpose({
 })
 
 // Composables
-const store = useCounterStore()
+
 
 // LocalState
 const progress = ref(40);
@@ -25,7 +24,7 @@ function hoge() {
 // watches
 watch(progress, () => {
   // eslint-disable-next-line no-console
-  console.log('yay', store.$state);
+  console.log('watch')
 })
 
 // lifeCycles

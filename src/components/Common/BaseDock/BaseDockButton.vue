@@ -15,7 +15,7 @@ const activeClass = computed(() => {
 
 <template>
   <button>
-    <span :class="{[activeClass]: currentPath.startsWith(toPath)}">
+    <span :class="{[activeClass]: currentPath.includes(toPath)}">
       <slot />
     </span>
     <span class="text-xs">{{ label }}</span>

@@ -8,8 +8,10 @@ const currentPath = computed(() => {
   return route.path
 })
 
-async function to(path: string) {
-  await router.push(path)
+async function to(name: string) {
+  await router.push({ name, params: {
+    token: route.params.token,
+  }})
 }
 
 </script>
@@ -42,7 +44,7 @@ async function to(path: string) {
       :current-path
       label="メッセージを見る"
       to-path="/messages"
-      @click="to('/messages')"
+      @click="to('messagePage')"
     >
       <svg
         class="size-6"
@@ -64,7 +66,7 @@ async function to(path: string) {
       :current-path
       label="クイズに答える"
       to-path="/questions"
-      @click="to('/questions/welcome')"
+      @click="to('questionPage')"
     >
       <svg
         class="size-6"

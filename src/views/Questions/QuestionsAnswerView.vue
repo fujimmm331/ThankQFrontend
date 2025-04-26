@@ -6,31 +6,95 @@ import BaseRadioGroup from '@/components/Common/BaseRadioGroup/BaseRadioGroup.vu
 import BaseSection from '@/components/Common/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
+import { useQuiz } from '@/composables/useQuiz';
+import { useQuizStore } from '@/stores/quizStore';
 
-const selectItem = ref<number | string | boolean>()
-const radioItems = ref([
-  {
-    label: '1.神奈川県',
-    value: 1,
-  },
-  {
-    label: '2.大阪府',
-    value: 2,
-  },
-  {
-    label: '3.徳島県',
-    value: 3,
-  },
-  {
-    label: '4.和歌山県',
-    value: 4,
+const { saveToStorage } = useQuiz();
+const store = useQuizStore();
+const route = useRoute();
+const router = useRouter();
+const sectionRef = useTemplateRef('baseSection');
+
+const id = computed(() => {
+  const _id = Number(route.params.id)
+
+  if (Number.isNaN(_id)) {
+    return -1
   }
-])
+  return _id;
+})
 
+const currentQuiz = computed(() => {
+  return store.findById(id.value)
+})
+
+const currentIndex = computed(() => {
+  return store.findIndexById(id.value);
+})
+
+const prevQuiz = computed(() => {
+  return store.findPrevQuiz(id.value);
+})
+
+const nextQuiz = computed(() => {
+  return store.findNextQuiz(id.value);
+})
+
+const radioItems = computed(() => {
+  return currentQuiz.value?.quiz_choices.map((item, index) => {
+    const prefix = index + 1
+    return {
+      label: `${String(prefix)}. ${item.choice}`,
+      value: item.id
+    }
+  }) ?? [];
+})
+
+async function onNext() {
+  const nextId = nextQuiz.value?.id;
+  if (nextId) {
+    await router.push({
+      name: 'questionAnswerPage',
+      params: {
+        id: nextId
+      }
+    })
+    sectionRef.value?.scrollToTop();
+    return;
+  }
+
+  await router.push({name: 'questionConfirmPage'})
+}
+
+async function onPrev() {
+  const prevId = prevQuiz.value?.id;
+
+  if (prevId) {
+    await router.push({
+      name: 'questionAnswerPage',
+      params: {
+        id: prevId
+      }
+    })
+    sectionRef.value?.scrollToTop();
+    return;
+  }
+
+  await router.push({
+    name: 'questionWelcomePage'
+  })
+}
+
+watch(currentQuiz, () => {
+  saveToStorage();
+});
 </script>
 
 <template>
-  <BaseSection class="flex flex-col">
+  <BaseSection
+    ref="baseSection"
+    class="flex flex-col"
+  >
     <BaseStack
       component="div"
       grow
@@ -42,11 +106,12 @@ const radioItems = ref([
       </BaseHeading>
       <BaseStepper
         class="min-h-10 mt-1"
-        :current-step="1"
-        :step-length="5"
+        :current-step="currentIndex"
+        :step-length="store.quizzes.length"
       />
 
       <BaseStack
+        v-if="currentQuiz"
         class="flex-grow-1 justify-end"
         component="div"
         gap="xl"
@@ -60,11 +125,11 @@ const radioItems = ref([
             class="py-8"
             tag="h3"
           >
-            新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？
+            Q. {{ currentQuiz.question }}
           </BaseHeading>
         </BaseCenter>
         <BaseRadioGroup
-          v-model="selectItem"
+          v-model="currentQuiz.answer_id"
           :radio-items
         />
 
@@ -77,9 +142,7 @@ const radioItems = ref([
             class="w-30"
             color="secondary"
             size="lg"
-            @click="$router.push({name: 'questionAnswerPage', params: {
-              id: 1
-            }})"
+            @click="onPrev"
           >
             戻る
           </BaseBtn>
@@ -87,8 +150,9 @@ const radioItems = ref([
           <BaseBtn
             class="flex-grow-1"
             color="primary"
+            :disabled="!currentQuiz.answer_id"
             size="xl"
-            @click="$router.push({name: 'questionConfirmPage'})"
+            @click="onNext"
           >
             次へ
           </BaseBtn>

@@ -6,6 +6,7 @@ export interface BaseBtnProps {
   color: ThankQColorType,
   variant?: BaseBtnVariantType
   behavior?: BaseBtnBehaviorType
+  loading?: boolean;
 };
 
 export type BaseBtnVariantType = 'outline'
