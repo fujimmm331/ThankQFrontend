@@ -6,8 +6,11 @@ import MessageRow from './MessageRow.vue';
 </script>
 
 <template>
-  <MessageRow>
-    <p class="text-end flex-grow-1">
+  <MessageRow class="items-center justify-end">
+    <p
+      class="text-left"
+      style="min-width: 66px;"
+    >
       <slot />
     </p>
   </MessageRow>

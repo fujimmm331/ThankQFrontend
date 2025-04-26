@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { getImagePath } from '@/utils/assetsPath';
 import MessageRow from '../MessageRow/MessageRow.vue';
 import MessageRowBody from '../MessageRow/MessageRowBody.vue';
 import MessageRowFrom from '../MessageRow/MessageRowFrom.vue';
 import MessageRowTitle from '../MessageRow/MessageRowTitle.vue';
+import TypeWriter from '../TypeWriter/TypeWriter.vue';
 import type { ThLetterProps } from './Type';
 
 const props = defineProps<ThLetterProps>();
-
 const MAX_PER_LINE = 15;
+const typingIndex = ref(-1);
 
 const lines = computed(() => {
   const lines: string[] = []
@@ -31,6 +33,18 @@ const skeleton = computed(() => {
   }
   return ''
 })
+
+const isShowFrom = computed(() => {
+  return typingIndex.value === lines.value.length
+})
+
+function onFinish() {
+  typingIndex.value = typingIndex.value + 1;
+}
+
+function isShowRow(index: number) {
+  return typingIndex.value >= index
+}
 </script>
 
 <template>
@@ -39,16 +53,39 @@ const skeleton = computed(() => {
     :class="[skeleton]"
   >
     <template v-if="!isLoading">
+      <div class="relative">
+        <img
+          alt="切手"
+          class="absolute right-0 top-1 opacity-20"
+          style="top: -16px;"
+          :src="getImagePath('kitte_15536')"
+          width="90"
+        >
+      </div>
       <MessageRowTitle v-if="to">
-        {{ to }}へ
+        <TypeWriter
+          :text="`${to}へ`"
+          :type-speed="10"
+          @finish="onFinish"
+        />
       </MessageRowTitle>
       <MessageRowBody
         v-for="line, index in lines"
         :key="index"
       >
-        {{ line }}
+        <TypeWriter
+          v-if="isShowRow(index)"
+          :text="line"
+          :type-speed="1"
+          @finish="onFinish"
+        />
       </MessageRowBody>
-      <MessageRowFrom>{{ from }}</MessageRowFrom>
+      <MessageRowFrom>
+        <TypeWriter
+          v-if="isShowFrom"
+          :text="from"
+        />
+      </MessageRowFrom>
       <MessageRow />
     </template>
   </div>
