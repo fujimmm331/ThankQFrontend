@@ -2,25 +2,18 @@
 import BaseCarousel from '@/components/Common/BaseCarousel/BaseCarousel.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
 import ThLetter from '@/components/messages/Letter/ThLetter.vue';
-import { useMessage } from '@/composables/useMessage';
-import { useUserToken } from '@/composables/useUserToken';
-import { useMessageStore } from '@/stores/messageStore';
+import { useGuest } from '@/composables/useGuest';
+import { useGuestStore } from '@/stores/guestStore';
 
-const { reloadMessage, isLoading } = useMessage();
-const store = useMessageStore();
-const token = useUserToken();
+const store = useGuestStore();
+const { isLoading } = useGuest();
 
 const imgList = computed(() => {
-  if (!token.value) return [];
-
-  return store.messages[token.value]?.[0]?.guest_photos.map((item) => {
+  return store.guest?.guest_photos.map((item) => {
     return { url: item.photo_path }
-  })
+  }) ?? []
 })
 
-onMounted(async () => {
-  await reloadMessage(token.value);
-})
 </script>
 
 <template>
@@ -29,12 +22,10 @@ onMounted(async () => {
   >
     <div>
       <ThLetter
-        v-for="item in store.messages[token]"
-        :key="item.id"
-        :body="item.message"
+        :body="store.guest?.message ?? ''"
         from="藤村和弥"
         :is-loading
-        :to="item.name"
+        :to="store.guest?.name"
       />
     </div>
     <div>

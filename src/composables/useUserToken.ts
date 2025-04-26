@@ -1,7 +1,7 @@
 export function useUserToken() {
   const route = useRoute();
 
-  return computed(() => {
+  return () => {
     return route.params.token as string;
-  })
+  }
 }

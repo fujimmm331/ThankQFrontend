@@ -3,7 +3,7 @@ export interface GuestPhotoType {
   photo_path: string
 }
 
-export class Message {
+export class Guest {
   id: number
   name: string
   message: string
