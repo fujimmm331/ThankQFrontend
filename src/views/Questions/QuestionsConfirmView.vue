@@ -7,6 +7,23 @@ import BaseSection from '@/components/Common/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import ConfirmListItem from '@/components/Questions/ConfirmListItem/ConfirmListItem.vue';
+import { useQuizStore } from '@/stores/quizStore';
+
+const store = useQuizStore();
+
+const results = computed(() => {
+  return store.quizzes.map((quiz) => {
+    const quizChoice = quiz.quiz_choices.find((quizChoice) => {
+      return quizChoice.id === quiz.answer_id;
+    });
+
+    return {
+      id: quiz.id,
+      question: quiz.question,
+      answer: quizChoice?.choice,
+    }
+  })
+})
 
 </script>
 
@@ -24,29 +41,10 @@ import ConfirmListItem from '@/components/Questions/ConfirmListItem/ConfirmListI
       <BaseCard shadow="xs">
         <BaseStack component="ul">
           <ConfirmListItem
-            answer-of-user="和歌山県"
-            question="新婦が住んだことのない都道府県は新婦が住んだことのない都道府県は？"
-          />
-
-          <ConfirmListItem
-            answer-of-user="和歌山県"
-            question="新婦が住んだことのない都道府県は新婦が住んだことのない都道府県は？"
-          />
-
-          <ConfirmListItem
-            answer-of-user="和歌山県"
-            question="新婦が住んだことのない都道府県は新婦が住んだことのない都道府県は？"
-          />
-
-          <ConfirmListItem
-            answer-of-user="和歌山県"
-            question="新婦が住んだことのない都道府県は新婦が住んだことのない都道府県は？"
-          />
-
-          <ConfirmListItem
-            answer-of-user="和歌山県"
-            no-border
-            question="新婦が住んだことのない都道府県は新婦が住んだことのない都道府県は？"
+            v-for="result in results"
+            :key="result.id"
+            :answer-of-user="result.answer ?? ''"
+            :question="result.question"
           />
         </BaseStack>
       </BaseCard>
@@ -70,7 +68,7 @@ import ConfirmListItem from '@/components/Questions/ConfirmListItem/ConfirmListI
             id: 1
           }})"
         >
-          なり直す
+          やり直す
         </BaseBtn>
 
         <BaseBtn
