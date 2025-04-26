@@ -1,10 +1,11 @@
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type QuizType = {
+export type QuizResponseType = {
   id: number,
   question: string
   quiz_choices: QuizChoiceType[]
   photo_path: string
+  answer_id: QuizChoiceType['id'] | null
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -21,10 +22,14 @@ export class Quiz {
   quiz_choices: QuizChoiceType[]
   photo_path: string
 
-  constructor(props: QuizType) {
+  // 内部管理用
+  answer_id: QuizChoiceType['id'] | null = null
+
+  constructor(props: QuizResponseType) {
     this.id = props.id;
     this.question = props.question
     this.quiz_choices = props.quiz_choices
     this.photo_path = props.photo_path
+    this.answer_id = props.answer_id
   }
 }

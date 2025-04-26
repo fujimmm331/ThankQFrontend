@@ -3,7 +3,7 @@ import { getQuizzes } from "@/services/getQuizzes";
 import { useQuizStore } from "@/stores/quizStore";
 
 export function useQuiz() {
-  const { setQuizzes, quizzes } = useQuizStore()
+  const store = useQuizStore()
   const _isLoading = ref(false)
   const _errorMessage = ref('');
 
@@ -12,11 +12,11 @@ export function useQuiz() {
       return _isLoading.value
     }),
     reloadQuiz: async () => {
-      if (quizzes.length > 0) return;
+      if (store.quizzes.length > 0) return;
 
       try {
         const response = await getQuizzes();
-        setQuizzes(response.data.map((item) => {
+        store.setQuizzes(response.data.map((item) => {
           return new Quiz(item);
         }));
       } catch (error) {

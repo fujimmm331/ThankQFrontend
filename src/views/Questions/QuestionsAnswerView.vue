@@ -8,7 +8,7 @@ import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
 import { useQuizStore } from '@/stores/quizStore';
 
-const { findById, findPrevQuiz, findNextQuiz, findIndexById, quizzes } = useQuizStore();
+const store = useQuizStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -22,19 +22,19 @@ const id = computed(() => {
 })
 
 const currentQuiz = computed(() => {
-  return findById(id.value)
+  return store.findById(id.value)
 })
 
 const currentIndex = computed(() => {
-  return findIndexById(id.value);
+  return store.findIndexById(id.value);
 })
 
 const prevQuiz = computed(() => {
-  return findPrevQuiz(id.value);
+  return store.findPrevQuiz(id.value);
 })
 
 const nextQuiz = computed(() => {
-  return findNextQuiz(id.value);
+  return store.findNextQuiz(id.value);
 })
 
 const radioItems = computed(() => {
@@ -46,9 +46,6 @@ const radioItems = computed(() => {
     }
   }) ?? [];
 })
-
-
-const selectItem = ref<number | string | boolean>()
 
 async function onNext() {
   const nextId = nextQuiz.value?.id;
@@ -98,10 +95,11 @@ async function onPrev() {
       <BaseStepper
         class="min-h-10 mt-1"
         :current-step="currentIndex"
-        :step-length="quizzes.length"
+        :step-length="store.quizzes.length"
       />
 
       <BaseStack
+        v-if="currentQuiz"
         class="flex-grow-1 justify-end"
         component="div"
         gap="xl"
@@ -115,11 +113,11 @@ async function onPrev() {
             class="py-8"
             tag="h3"
           >
-            {{ currentQuiz?.question }}
+            {{ currentQuiz.question }}
           </BaseHeading>
         </BaseCenter>
         <BaseRadioGroup
-          v-model="selectItem"
+          v-model="currentQuiz.answer_id"
           :radio-items
         />
 

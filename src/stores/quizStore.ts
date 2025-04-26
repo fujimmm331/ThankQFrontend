@@ -43,9 +43,7 @@ export const useQuizStore = defineStore('quiz', () => {
 
   return {
     setQuizzes,
-    quizzes: computed(() => {
-      return quizzes.value
-    }),
+    quizzes,
     findById,
     findNextQuiz,
     findPrevQuiz,
