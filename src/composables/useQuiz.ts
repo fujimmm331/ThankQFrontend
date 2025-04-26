@@ -1,3 +1,4 @@
+import { Quiz } from "@/models/quiz";
 import { getQuizzes } from "@/services/getQuizzes";
 import { useQuizStore } from "@/stores/quizStore";
 
@@ -15,7 +16,9 @@ export function useQuiz() {
 
       try {
         const response = await getQuizzes();
-        setQuizzes(response.data);
+        setQuizzes(response.data.map((item) => {
+          return new Quiz(item);
+        }));
       } catch (error) {
         const _error = error as Error
         _errorMessage.value = _error.message;

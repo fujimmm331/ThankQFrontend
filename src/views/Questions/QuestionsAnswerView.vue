@@ -6,27 +6,82 @@ import BaseRadioGroup from '@/components/Common/BaseRadioGroup/BaseRadioGroup.vu
 import BaseSection from '@/components/Common/BaseSection.vue';
 import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
+import { useQuizStore } from '@/stores/quizStore';
+
+const { findById, findPrevQuiz, findNextQuiz, findIndexById, quizzes } = useQuizStore();
+const route = useRoute();
+const router = useRouter();
+
+const id = computed(() => {
+  const _id = Number(route.params.id)
+
+  if (Number.isNaN(_id)) {
+    return -1
+  }
+  return _id;
+})
+
+const currentQuiz = computed(() => {
+  return findById(id.value)
+})
+
+const currentIndex = computed(() => {
+  return findIndexById(id.value);
+})
+
+const prevQuiz = computed(() => {
+  return findPrevQuiz(id.value);
+})
+
+const nextQuiz = computed(() => {
+  return findNextQuiz(id.value);
+})
+
+const radioItems = computed(() => {
+  return currentQuiz.value?.quiz_choices.map((item, index) => {
+    const prefix = index + 1
+    return {
+      label: `${String(prefix)}. ${item.choice}`,
+      value: item.id
+    }
+  }) ?? [];
+})
+
 
 const selectItem = ref<number | string | boolean>()
-const radioItems = ref([
-  {
-    label: '1.神奈川県',
-    value: 1,
-  },
-  {
-    label: '2.大阪府',
-    value: 2,
-  },
-  {
-    label: '3.徳島県',
-    value: 3,
-  },
-  {
-    label: '4.和歌山県',
-    value: 4,
-  }
-])
 
+async function onNext() {
+  const nextId = nextQuiz.value?.id;
+  if (nextId) {
+    await router.push({
+      name: 'questionAnswerPage',
+      params: {
+        id: nextId
+      }
+    })
+    return;
+  }
+
+  await router.push({name: 'questionConfirmPage'})
+}
+
+async function onPrev() {
+  const prevId = prevQuiz.value?.id;
+
+  if (prevId) {
+    await router.push({
+      name: 'questionAnswerPage',
+      params: {
+        id: prevId
+      }
+    })
+    return;
+  }
+
+  await router.push({
+    name: 'questionWelcomePage'
+  })
+}
 </script>
 
 <template>
@@ -42,8 +97,8 @@ const radioItems = ref([
       </BaseHeading>
       <BaseStepper
         class="min-h-10 mt-1"
-        :current-step="1"
-        :step-length="5"
+        :current-step="currentIndex"
+        :step-length="quizzes.length"
       />
 
       <BaseStack
@@ -60,7 +115,7 @@ const radioItems = ref([
             class="py-8"
             tag="h3"
           >
-            新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？新婦が住んだことのない街は？
+            {{ currentQuiz?.question }}
           </BaseHeading>
         </BaseCenter>
         <BaseRadioGroup
@@ -77,9 +132,7 @@ const radioItems = ref([
             class="w-30"
             color="secondary"
             size="lg"
-            @click="$router.push({name: 'questionAnswerPage', params: {
-              id: 1
-            }})"
+            @click="onPrev"
           >
             戻る
           </BaseBtn>
@@ -88,7 +141,7 @@ const radioItems = ref([
             class="flex-grow-1"
             color="primary"
             size="xl"
-            @click="$router.push({name: 'questionConfirmPage'})"
+            @click="onNext"
           >
             次へ
           </BaseBtn>

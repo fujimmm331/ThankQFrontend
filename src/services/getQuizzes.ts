@@ -1,7 +1,7 @@
-import type { Quiz } from "@/models/quiz";
+import type { QuizResponseType } from "@/models/quiz";
 import { myFetcher, type ResponseType } from "@/utils/myFetcher";
 
-export const getQuizzes = async (): Promise<ResponseType<Quiz[]>> => {
+export const getQuizzes = async (): Promise<ResponseType<QuizResponseType[]>> => {
   return await myFetcher(`http://localhost:80/api/quizzes/1`, {
     headers: {
       Accept: 'application/json',
