@@ -138,6 +138,7 @@ async function onPrev() {
           <BaseBtn
             class="flex-grow-1"
             color="primary"
+            :disabled="!currentQuiz.answer_id"
             size="xl"
             @click="onNext"
           >
