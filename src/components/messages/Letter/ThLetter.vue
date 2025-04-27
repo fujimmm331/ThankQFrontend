@@ -39,12 +39,24 @@ const isShowFrom = computed(() => {
 })
 
 function onFinish() {
-  typingIndex.value = typingIndex.value + 1;
+  _addIndex();
 }
 
 function isShowRow(index: number) {
   return typingIndex.value >= index
 }
+
+function _addIndex() {
+  typingIndex.value = typingIndex.value + 1;
+}
+
+function init() {
+  if (!props.to) {
+    _addIndex();
+  }
+}
+
+init();
 </script>
 
 <template>
@@ -57,8 +69,8 @@ function isShowRow(index: number) {
         <img
           alt="切手"
           class="absolute right-0 top-1 opacity-20"
-          style="top: -16px;"
           :src="getImagePath('kitte_15536')"
+          style="top: -16px;"
           width="90"
         >
       </div>
