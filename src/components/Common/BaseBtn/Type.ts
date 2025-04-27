@@ -3,7 +3,7 @@ import type { ThankQSizeType } from "@/themes/size";
 
 export interface BaseBtnProps {
   size: ThankQSizeType,
-  color: ThankQColorType,
+  color?: ThankQColorType,
   variant?: BaseBtnVariantType
   behavior?: BaseBtnBehaviorType
   loading?: boolean;
