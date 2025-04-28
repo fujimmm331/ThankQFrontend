@@ -4,6 +4,7 @@ import BaseDock from './components/Common/BaseDock/BaseDock.vue';
 import { useGuest } from './composables/useGuest';
 import { useUserToken } from './composables/useUserToken';
 import GlobalHeader from './components/Global/GlobalHeader/GlobalHeader.vue';
+import GlobalDialogOpener from './components/Global/GlobalDialogOpener/GlobalDialogOpener.vue';
 const { reloadGuest } = useGuest();
 
 const getToken = useUserToken();
@@ -27,6 +28,7 @@ onMounted(async () => {
     }"
   >
     <GlobalHeader v-if="route.name !== 'home'" />
+    <GlobalDialogOpener />
     <RouterView />
     <BaseDock v-if="route.name !== 'home'" />
   </main>
