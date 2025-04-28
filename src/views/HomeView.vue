@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCard from '@/components/Common/BaseCard/BaseCard.vue';
 import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
