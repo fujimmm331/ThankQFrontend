@@ -8,23 +8,22 @@ import TypeWriter from '../TypeWriter/TypeWriter.vue';
 import type { ThLetterProps } from './Type';
 
 const props = defineProps<ThLetterProps>();
-const MAX_PER_LINE = 15;
+const emits = defineEmits<{
+  draw: [];
+}>()
+const DEFAULT_MAX_PER_LINE = 15;
 const typingIndex = ref(-1);
+const lines = ref<string[]>([])
+const letterRef = useTemplateRef('letter');
 
-const lines = computed(() => {
-  const lines: string[] = []
-  props.body.split('\n').forEach(paragraph => {
-    for (let i = 0; i < paragraph.length; i += MAX_PER_LINE) {
-      lines.push(paragraph.slice(i, i + MAX_PER_LINE))
-    }
-
-    // 空行や末尾の改行も反映したい場合
-    if (paragraph === '') {
-      lines.push('')
-    }
-  })
-
-  return lines
+const perLine = computed(() => {
+  const CHAR_WIDTH = 18;
+  const ROW_PADDING_X = 64
+  const _width = letterRef.value?.offsetWidth
+  if (_width) {
+    return (_width - ROW_PADDING_X) / CHAR_WIDTH
+  }
+  return DEFAULT_MAX_PER_LINE;
 })
 
 const skeleton = computed(() => {
@@ -39,16 +38,44 @@ const isShowFrom = computed(() => {
 })
 
 function onFinish() {
-  typingIndex.value = typingIndex.value + 1;
+  _addIndex();
 }
 
 function isShowRow(index: number) {
   return typingIndex.value >= index
 }
+
+function _addIndex() {
+  typingIndex.value = typingIndex.value + 1;
+}
+
+function init() {
+  if (!props.to) {
+    _addIndex();
+  }
+}
+
+init();
+
+onMounted(async () => {
+  await until(perLine).toBeTruthy();
+
+  props.body.split('\n').forEach(paragraph => {
+    for (let i = 0; i < paragraph.length; i += perLine.value) {
+      lines.value.push(paragraph.slice(i, i + perLine.value))
+    }
+
+    // 空行や末尾の改行も反映したい場合
+    if (paragraph === '') {
+      lines.value.push('')
+    }
+  })
+})
 </script>
 
 <template>
   <div
+    ref="letter"
     class="th-letter min-h-100"
     :class="[skeleton]"
   >
@@ -57,8 +84,8 @@ function isShowRow(index: number) {
         <img
           alt="切手"
           class="absolute right-0 top-1 opacity-20"
-          style="top: -16px;"
           :src="getImagePath('kitte_15536')"
+          style="top: -16px;"
           width="90"
         >
       </div>
@@ -84,6 +111,7 @@ function isShowRow(index: number) {
         <TypeWriter
           v-if="isShowFrom"
           :text="from"
+          @finish="emits('draw')"
         />
       </MessageRowFrom>
       <MessageRow />

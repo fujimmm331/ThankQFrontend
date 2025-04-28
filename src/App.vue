@@ -7,6 +7,7 @@ import GlobalHeader from './components/Global/GlobalHeader/GlobalHeader.vue';
 const { reloadGuest } = useGuest();
 
 const getToken = useUserToken();
+const route = useRoute();
 
 const token = computed(() => {
   return getToken();
@@ -19,9 +20,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="h-dvh bg-base-100 pb-16 flex flex-col">
-    <GlobalHeader />
+  <main
+    class="h-dvh bg-base-100 flex flex-col"
+    :class="{
+      'pb-16': route.name !== 'home'
+    }"
+  >
+    <GlobalHeader v-if="route.name !== 'home'" />
     <RouterView />
-    <BaseDock />
+    <BaseDock v-if="route.name !== 'home'" />
   </main>
 </template>

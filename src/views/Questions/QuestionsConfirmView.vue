@@ -74,7 +74,7 @@ async function onSend() {
       </BaseText>
 
       <BaseStack
-        class="items-center sticky rounded-xl bottom-0 bg-base-100"
+        class="items-center sticky rounded-xl bottom-0"
         :col="false"
         component="div"
         gap="md"

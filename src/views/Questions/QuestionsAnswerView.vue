@@ -59,7 +59,6 @@ async function onNext() {
         id: nextId
       }
     })
-    sectionRef.value?.scrollToTop();
     return;
   }
 
@@ -76,7 +75,6 @@ async function onPrev() {
         id: prevId
       }
     })
-    sectionRef.value?.scrollToTop();
     return;
   }
 
@@ -87,6 +85,7 @@ async function onPrev() {
 
 watch(currentQuiz, () => {
   saveToStorage();
+  sectionRef.value?.scrollToTop();
 });
 </script>
 
