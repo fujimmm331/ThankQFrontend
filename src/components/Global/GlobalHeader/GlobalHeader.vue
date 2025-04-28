@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-import { RouterLink } from 'vue-router';
 // import type { GlobalHeaderProps } from './Type';
 
 // defineProps<GlobalHeaderProps>();
@@ -9,7 +7,7 @@ const route = useRoute();
 
 async function onHome() {
   await router.push({
-    name: 'messagePage',
+    name: 'home',
     params: {
       token: route.params.token,
     }
