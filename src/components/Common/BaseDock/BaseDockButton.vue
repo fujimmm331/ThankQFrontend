@@ -8,7 +8,7 @@ defineProps<{
 
 
 const activeClass = computed(() => {
-  return 'bg-accent px-4 py-1 rounded-3xl'
+  return 'bg-accent px-4 py-1 rounded-3xl flex'
 })
 
 </script>
