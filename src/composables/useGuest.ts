@@ -13,13 +13,13 @@ export function useGuest() {
     reloadGuest: async (token: string) => {
       if (guest) return;
       _isLoading.value = true
+      _errorMessage.value = '';
 
       try {
         const response = await getGuest(token);
         setGuest(response.data);
-      } catch (error) {
-        const _error = error as Error
-        _errorMessage.value = _error.message;
+      } catch {
+        _errorMessage.value = 'メッセージを取得できませんでした。\n新郎・新婦へご連絡ください。。🙇🙇‍♀️';
       }
       finally {
         _isLoading.value = false;

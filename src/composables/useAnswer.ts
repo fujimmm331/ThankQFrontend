@@ -29,18 +29,15 @@ export function useQuizAnswer() {
     }),
     sendAnswer: async () => {
       _isLoading.value = true
+      _errorMessage.value = '';
       try {
         const params = _createAnswerParams();
         if (params.guest_id === -1) {
           throw Error('ゲストの情報が取得できてないようです。一度画面をリロードしてください。')
         }
         await postAnswer(params);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-
-        const _error = error as Error
-        _errorMessage.value = _error.message;
+      } catch {
+        _errorMessage.value = 'もう一度「回答する」ボタンを押してみてください。\nそれでもダメなら、新郎新婦にご連絡ください🙇‍♂️🙇‍♀️';
       }
       finally {
         _isLoading.value = false

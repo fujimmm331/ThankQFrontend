@@ -8,10 +8,12 @@ import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import ConfirmListItem from '@/components/Questions/ConfirmListItem/ConfirmListItem.vue';
 import { useQuizAnswer } from '@/composables/useAnswer';
+import { useDialog } from '@/composables/useDialog';
 import { useQuizStore } from '@/stores/quizStore';
 
 const store = useQuizStore();
 const { isLoading, sendAnswer, errorMessage } = useQuizAnswer()
+const { open } = useDialog()
 const router = useRouter();
 
 const results = computed(() => {
@@ -43,6 +45,15 @@ async function onSend() {
     await router.push({name: 'questionEndPage'})
   }
 }
+
+watch(errorMessage, (newErrorMessage) => {
+  if (newErrorMessage) {
+    open('AlertDialog', {
+      title: 'うまくいきませんでした！',
+      body: newErrorMessage.split('\n'),
+    })
+  }
+});
 </script>
 
 <template>
