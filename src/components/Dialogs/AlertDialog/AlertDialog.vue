@@ -31,9 +31,20 @@ defineExpose({
       </BaseHeading>
     </template>
 
-    <BaseText class="whitespace-pre">
+    <BaseText
+      v-if="typeof body === 'string'"
+      class="w-full break-words whitespace-normal whitespace-pre"
+    >
       {{ body }}
     </BaseText>
+    <template v-else>
+      <BaseText
+        v-for="b, index in body"
+        :key="index"
+      >
+        {{ b }}
+      </BaseText>
+    </template>
 
     <template #footer>
       <BaseBtn

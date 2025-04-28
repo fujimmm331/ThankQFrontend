@@ -26,7 +26,7 @@ function onDraw() {
 
 setTimeout(() => {
   isShown.value = true;
-})
+}, 100)
 </script>
 
 <template>

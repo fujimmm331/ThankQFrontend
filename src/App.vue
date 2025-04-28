@@ -5,7 +5,9 @@ import { useGuest } from './composables/useGuest';
 import { useUserToken } from './composables/useUserToken';
 import GlobalHeader from './components/Global/GlobalHeader/GlobalHeader.vue';
 import GlobalDialogOpener from './components/Global/GlobalDialogOpener/GlobalDialogOpener.vue';
-const { reloadGuest } = useGuest();
+import { useDialog } from './composables/useDialog';
+const { reloadGuest, errorMessage } = useGuest();
+const { open } = useDialog();
 
 const getToken = useUserToken();
 const route = useRoute();
@@ -18,6 +20,15 @@ onMounted(async () => {
   await until(token).toBeTruthy();
   await reloadGuest(token.value);
 })
+
+watch(errorMessage, (newErrorMessage) => {
+  if (newErrorMessage) {
+    open('AlertDialog', {
+      title: 'エラーが発生しました',
+      body: newErrorMessage,
+    })
+  }
+});
 </script>
 
 <template>
