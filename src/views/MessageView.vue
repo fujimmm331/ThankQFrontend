@@ -8,12 +8,21 @@ import { useGuestStore } from '@/stores/guestStore';
 const store = useGuestStore();
 const { isLoading } = useGuest();
 const isShown = ref(false)
+const currentIndex = ref(0);
 
 const imgList = computed(() => {
   return store.guest?.guest_photos.map((item) => {
     return { url: item.photo_path }
   }) ?? []
 })
+
+function isShownMessage(index: number) {
+  return currentIndex.value >= index;
+}
+
+function onDraw() {
+  currentIndex.value = currentIndex.value + 1
+}
 
 setTimeout(() => {
   isShown.value = true;
@@ -26,14 +35,17 @@ setTimeout(() => {
       v-if="isShown"
       class="h-full p-6 flex flex-col gap-4"
     >
-      <div>
+      <div
+        v-for="item, index in store.guest?.messages"
+        :key="index"
+      >
         <ThLetter
-          v-for="item, index in store.guest?.messages"
-          :key="index"
+          v-if="isShownMessage(index)"
           :body="item.message"
           :from="item.name"
           :is-loading
           :to="index === 0 ? store.guest?.name : ''"
+          @draw="onDraw"
         />
       </div>
       <div>

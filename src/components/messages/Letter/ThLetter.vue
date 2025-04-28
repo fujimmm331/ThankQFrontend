@@ -8,23 +8,22 @@ import TypeWriter from '../TypeWriter/TypeWriter.vue';
 import type { ThLetterProps } from './Type';
 
 const props = defineProps<ThLetterProps>();
-const MAX_PER_LINE = 15;
+const emits = defineEmits<{
+  draw: [];
+}>()
+const DEFAULT_MAX_PER_LINE = 15;
 const typingIndex = ref(-1);
+const lines = ref<string[]>([])
+const letterRef = useTemplateRef('letter');
 
-const lines = computed(() => {
-  const lines: string[] = []
-  props.body.split('\n').forEach(paragraph => {
-    for (let i = 0; i < paragraph.length; i += MAX_PER_LINE) {
-      lines.push(paragraph.slice(i, i + MAX_PER_LINE))
-    }
-
-    // 空行や末尾の改行も反映したい場合
-    if (paragraph === '') {
-      lines.push('')
-    }
-  })
-
-  return lines
+const perLine = computed(() => {
+  const CHAR_WIDTH = 18;
+  const ROW_PADDING_X = 64
+  const _width = letterRef.value?.offsetWidth
+  if (_width) {
+    return (_width - ROW_PADDING_X) / CHAR_WIDTH
+  }
+  return DEFAULT_MAX_PER_LINE;
 })
 
 const skeleton = computed(() => {
@@ -57,10 +56,26 @@ function init() {
 }
 
 init();
+
+onMounted(async () => {
+  await until(perLine).toBeTruthy();
+
+  props.body.split('\n').forEach(paragraph => {
+    for (let i = 0; i < paragraph.length; i += perLine.value) {
+      lines.value.push(paragraph.slice(i, i + perLine.value))
+    }
+
+    // 空行や末尾の改行も反映したい場合
+    if (paragraph === '') {
+      lines.value.push('')
+    }
+  })
+})
 </script>
 
 <template>
   <div
+    ref="letter"
     class="th-letter min-h-100"
     :class="[skeleton]"
   >
@@ -96,6 +111,7 @@ init();
         <TypeWriter
           v-if="isShowFrom"
           :text="from"
+          @finish="emits('draw')"
         />
       </MessageRowFrom>
       <MessageRow />
