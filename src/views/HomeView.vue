@@ -3,7 +3,9 @@ import BaseBtn from '@/components/Common/BaseBtn/BaseBtn.vue';
 import BaseCard from '@/components/Common/BaseCard/BaseCard.vue';
 import BaseCenter from '@/components/Common/BaseCenter/BaseCenter.vue';
 import BaseHeading from '@/components/Common/BaseHeading/BaseHeading.vue';
+import BaseLink from '@/components/Common/BaseLink/BaseLink.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
+import WaveText from '@/components/Common/WaveText/WaveText.vue';
 import { useGuest } from '@/composables/useGuest';
 import { useGuestStore } from '@/stores/guestStore';
 import { getImagePath } from '@/utils/assetsPath';
@@ -69,12 +71,13 @@ setTimeout(() => {
           >
             {{ store.guest?.name }} 様
           </BaseHeading>
-          <BaseBtn
+          <BaseLink
+            class="text-center"
             size="md"
             @click="onClick"
           >
-            あける
-          </BaseBtn>
+            <WaveText text="メッセージを見る" />
+          </BaseLink>
         </BaseCard>
       </BaseCenter>
     </BaseSection>

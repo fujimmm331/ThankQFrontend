@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { ThankQColorType } from '@/themes/color';
-import type { BaseTextProps } from './Type';
+import type { BaseLinkProps } from './Type';
 
-const props = defineProps<BaseTextProps>();
+const props = defineProps<BaseLinkProps>();
 
 const btnColor = computed(() => {
   const colorClass: Record<ThankQColorType, string> = {
@@ -28,7 +28,7 @@ const btnColor = computed(() => {
   <a
     class="link"
     :class="[btnColor]"
-    href="https://daisyui.com/components/link/"
+    :href="href"
   >
     <slot />
   </a>

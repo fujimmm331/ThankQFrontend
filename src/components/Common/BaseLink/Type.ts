@@ -1,5 +1,6 @@
 import type { ThankQColorType } from "@/themes/color";
 
-export interface BaseTextProps {
+export interface BaseLinkProps {
   color?: ThankQColorType,
+  href?: string,
 };
