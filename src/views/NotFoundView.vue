@@ -6,6 +6,16 @@ import BaseStack from '@/components/Common/BaseStack/BaseStack.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import { useTokenStore } from '@/stores/tokenStore';
 
+interface EnemyType {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+  dx: number;
+}
+
+
 const canvasRef = useTemplateRef('canvas');
 
 const player = {
@@ -23,6 +33,9 @@ const bullets = ref<{
   width: number;
   height: number;
 }[]>([]);
+
+const enemies: EnemyType[] = [];
+
 const bulletSpeed = 5;
 
 
@@ -72,6 +85,79 @@ function drawBullets() {
     context.value?.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
   });
 }
+function drawPixelEnemy(enemy: EnemyType) {
+  const context = canvasRef.value?.getContext('2d')
+  const pixelSize = 5;
+  const sprite = [
+    '00100',
+    '01110',
+    '11111',
+    '10101',
+    '00100',
+    '01010'
+  ];
+  if (!context) return
+
+  context.fillStyle = enemy.color;
+
+  for (let row = 0; row < sprite.length; row++) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    for (let col = 0; col < sprite[row]!.length; col++) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      if (sprite[row]![col] === '1') {
+        context.fillRect(
+          enemy.x + col * pixelSize,
+          enemy.y + row * pixelSize,
+          pixelSize,
+          pixelSize
+        );
+      }
+    }
+  }
+}
+
+function drawEnemies() {
+  for (const enemy of enemies) {
+    drawPixelEnemy(enemy)
+  }
+}
+
+function updateEnemies() {
+  for (const enemy of enemies) {
+    enemy.x += enemy.dx;
+
+    // 端に当たったら反転（簡単な動き）
+    if (enemy.x <= 0 || enemy.x + enemy.width >= (canvasRef.value?.width ?? 320)) {
+      enemy.dx *= -1;
+      // すこし下にずらす
+      // for (const e of enemies) {
+      //   e.y += 10;
+      // }
+      break;
+    }
+  }
+}
+
+function createEnemies(rows: number, cols: number) {
+  const padding = 15;
+  const offsetX = 30;
+  const offsetY = 30;
+  const width = 20;
+  const height = 20;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      enemies.push({
+        x: offsetX + col * (width + padding),
+        y: offsetY + row * (height + padding),
+        width,
+        height,
+        color: 'green',
+        dx: 1
+      });
+    }
+  }
+}
 
 function updateBullets() {
   for (let i = bullets.value.length - 1; i >= 0; i--) {
@@ -110,13 +196,16 @@ function fire() {
 function gameLoop() {
   context.value?.clearRect(0, 0, canvasRef.value?.width ?? 320, canvasRef.value?.height ?? 320);
   updateBullets();
+  updateEnemies();
   drawPlayer();
   drawBullets();
+  drawEnemies();
   requestAnimationFrame(gameLoop);
 }
 
 
 onMounted(() => {
+  createEnemies(2, 8);
   gameLoop()
 })
 
