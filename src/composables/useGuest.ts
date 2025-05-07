@@ -19,7 +19,8 @@ export function useGuest() {
         const response = await getGuest(token);
         setGuest(response.data);
       } catch {
-        _errorMessage.value = 'メッセージを取得できませんでした。\n新郎・新婦へご連絡ください。。🙇🙇‍♀️';
+        _errorMessage.value =
+          'メッセージを取得できませんでした。\nもう一度QRコードを読み込んでください。\nそれでもダメであれば、\n新郎・新婦へご連絡ください。。🙇🙇‍♀️';
       }
       finally {
         _isLoading.value = false;

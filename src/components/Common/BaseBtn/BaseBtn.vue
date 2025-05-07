@@ -6,6 +6,7 @@ import type { ThankQColorType } from '@/themes/color';
 const props = defineProps<BaseBtnProps>()
 
 const btnColor = computed(() => {
+  if (!props.color) return '';
   const colorClass: Record<ThankQColorType, string> = {
     'primary': 'btn-primary',
     'secondary': 'btn-secondary',
