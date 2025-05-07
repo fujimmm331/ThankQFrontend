@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MessageView from '@/views/MessageView.vue'
 import { createQuestionPage } from './getQuestionPage'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,16 @@ const router = createRouter({
       component: MessageView,
     },
     ...createQuestionPage(),
+    // {
+    //   path: "/:token/:notFound(.*)",
+    //   name: 'error.404',
+    //   component: NotFoundView,
+    // },
+    {
+      path: "/:notFound(.*)",
+      name: 'error.404',
+      component: NotFoundView,
+    },
   ],
 })
 
