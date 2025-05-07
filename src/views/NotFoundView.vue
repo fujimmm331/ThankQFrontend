@@ -15,6 +15,14 @@ interface EnemyType {
   dx: number;
 }
 
+interface EnemyBulletType {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  speed: number;
+}
+
 
 const canvasRef = useTemplateRef('canvas');
 
@@ -35,6 +43,7 @@ const bullets: {
 }[] = [];
 
 const enemies: EnemyType[] = [];
+const enemyBullets: EnemyBulletType[] = [];
 
 const bulletSpeed = 5;
 
@@ -159,6 +168,45 @@ function createEnemies(rows: number, cols: number) {
   }
 }
 
+function enemyShoot() {
+  if (enemies.length === 0) return;
+
+  const shooter = enemies[Math.floor(Math.random() * enemies.length)];
+  if (shooter) {
+    enemyBullets.push({
+      x: shooter.x + shooter.width / 2 - 2,
+      y: shooter.y + shooter.height,
+      width: 4,
+      height: 10,
+      speed: 3
+    });
+  }
+}
+
+function updateEnemyBullets() {
+  for (let i = enemyBullets.length - 1; i >= 0; i--) {
+    const bullet = enemyBullets[i]
+    if (bullet) {
+      bullet.y += bullet.speed;
+
+      // 画面外に出たら消す
+      if (bullet.y > (canvasRef.value?.height ?? 320)) {
+        enemyBullets.splice(i, 1);
+      }
+    }
+  }
+}
+
+function drawEnemyBullets() {
+  const ctx = context.value
+  if (ctx) {
+    ctx.fillStyle = 'red';
+    for (const bullet of enemyBullets) {
+      ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    }
+  }
+}
+
 function updateBullets() {
   for (let i = bullets.length - 1; i >= 0; i--) {
     const bullet = bullets[i];
@@ -212,7 +260,6 @@ function checkCollisions() {
           break;
         }
       }
-
     }
   }
 }
@@ -221,10 +268,12 @@ function gameLoop() {
   context.value?.clearRect(0, 0, canvasRef.value?.width ?? 320, canvasRef.value?.height ?? 320);
   updateBullets();
   updateEnemies();
+  updateEnemyBullets();
   checkCollisions();
   drawPlayer();
   drawBullets();
   drawEnemies();
+  drawEnemyBullets();
   requestAnimationFrame(gameLoop);
 }
 
@@ -232,6 +281,7 @@ function gameLoop() {
 onMounted(() => {
   createEnemies(2, 8);
   gameLoop()
+  setInterval(enemyShoot, 1000);
 })
 
 </script>
