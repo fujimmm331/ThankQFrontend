@@ -14,6 +14,7 @@ const model = defineModel<BaseRadioProps['value']>()
       v-model="model"
       v-for="radio, index in radioItems"
       :key="index"
+      :disabled
       :label="radio.label"
       :value="radio.value"
     />

@@ -9,10 +9,13 @@ import BaseText from '@/components/Common/BaseText/BaseText.vue';
 import ConfirmListItem from '@/components/Questions/ConfirmListItem/ConfirmListItem.vue';
 import { useQuizAnswer } from '@/composables/useAnswer';
 import { useDialog } from '@/composables/useDialog';
+import { useQuiz } from '@/composables/useQuiz';
 import { useQuizStore } from '@/stores/quizStore';
+import { RouterLink } from 'vue-router';
 
 const store = useQuizStore();
-const { isLoading, sendAnswer, errorMessage } = useQuizAnswer()
+const { isLoading, sendAnswer, errorMessage, } = useQuizAnswer()
+const { saveStatusToStorage, status } = useQuiz();
 const { open } = useDialog()
 const router = useRouter();
 
@@ -42,6 +45,7 @@ const btnText = computed(() => {
 async function onSend() {
   await sendAnswer();
   if (!errorMessage.value) {
+    saveStatusToStorage('done');
     await router.push({name: 'questionEndPage'})
   }
 }
@@ -81,10 +85,17 @@ watch(errorMessage, (newErrorMessage) => {
 
       <BaseText>
         回答は<strong>1回のみ</strong>となります！<br>
-        「やり直す」を押すと、回答を修正できます。
+        <RouterLink
+          v-if="status === 'done'"
+          class="text-sm link"
+          :to="{name: 'questionEndPage'}"
+        >
+          回答完了ページを見る
+        </RouterLink>
       </BaseText>
 
       <BaseStack
+        v-if="status === 'answering'"
         class="items-center sticky rounded-xl bottom-0"
         :col="false"
         component="div"

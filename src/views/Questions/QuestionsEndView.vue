@@ -37,12 +37,13 @@ import { getImagePath } from '@/utils/assetsPath';
     </div>
     <div class="flex gap-4 justify-center">
       <BaseLink
-        class="text-lg"
+        class="text-lg no-underline"
         color="primary"
         :href="links.lineRoom.url"
       >
         <span class="flex gap-1">
           写真・動画を共有する<BaseIcon
+            class="text-sm"
             color="primary"
             icon="launch"
           />

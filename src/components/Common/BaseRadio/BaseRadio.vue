@@ -15,6 +15,7 @@ const model = defineModel<BaseRadioProps['value']>()
     <input
       v-model="model"
       class="radio"
+      :disabled
       type="radio"
       :value
     >

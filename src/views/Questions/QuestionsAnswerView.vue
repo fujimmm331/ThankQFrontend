@@ -9,7 +9,7 @@ import BaseStepper from '@/components/Common/BaseStepper/BaseStepper.vue';
 import { useQuiz } from '@/composables/useQuiz';
 import { useQuizStore } from '@/stores/quizStore';
 
-const { saveToStorage } = useQuiz();
+const { saveToStorage, status } = useQuiz();
 const store = useQuizStore();
 const route = useRoute();
 const router = useRouter();
@@ -84,7 +84,9 @@ async function onPrev() {
 }
 
 watch(currentQuiz, () => {
-  saveToStorage();
+  if (status.value === 'answering') {
+    saveToStorage();
+  }
   sectionRef.value?.scrollToTop();
 });
 </script>
@@ -129,6 +131,7 @@ watch(currentQuiz, () => {
         </BaseCenter>
         <BaseRadioGroup
           v-model="currentQuiz.answer_id"
+          :disabled="status === 'done'"
           :radio-items
         />
 
