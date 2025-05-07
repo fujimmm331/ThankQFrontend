@@ -1,15 +1,21 @@
 <script setup lang="ts">
-// import type { GlobalHeaderProps } from './Type';
+import type { GlobalHeaderProps } from './Type';
 
-// defineProps<GlobalHeaderProps>();
+const props = defineProps<GlobalHeaderProps>();
 const router = useRouter();
 const route = useRoute();
 
+const token = computed(() => {
+  return route.params.token ?? props.storeToken;
+})
+
 async function onHome() {
+  if (!token.value) return
+
   await router.push({
     name: 'home',
     params: {
-      token: route.params.token,
+      token: token.value
     }
   })
 }

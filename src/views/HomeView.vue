@@ -68,9 +68,10 @@ setTimeout(() => {
             class="text-center my-16 message-row tracking-wider"
             tag="h1"
           >
-            {{ store.guest?.name }} 様
+            {{ store.guest?.name ?? '私たちの大事なあなた' }} 様
           </BaseHeading>
           <BaseLink
+            v-if="store.guest?.name"
             class="text-center"
             size="md"
             @click="onClick"
