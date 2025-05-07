@@ -27,12 +27,12 @@ const player = {
   speed: 10
 };
 
-const bullets = ref<{
+const bullets: {
   x: number;
   y: number;
   width: number;
   height: number;
-}[]>([]);
+}[] = [];
 
 const enemies: EnemyType[] = [];
 
@@ -81,7 +81,7 @@ function drawPlayer() {
 function drawBullets() {
   if (!context.value) return;
   context.value.fillStyle = 'white';
-  bullets.value.forEach(bullet => {
+  bullets.forEach(bullet => {
     context.value?.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
   });
 }
@@ -160,12 +160,12 @@ function createEnemies(rows: number, cols: number) {
 }
 
 function updateBullets() {
-  for (let i = bullets.value.length - 1; i >= 0; i--) {
-    const bullet = bullets.value[i];
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const bullet = bullets[i];
     if (bullet) {
       bullet.y -= bulletSpeed;
       if (bullet.y + bullet.height < 0) {
-        bullets.value.splice(i, 1);
+        bullets.splice(i, 1);
       }
     }
   }
@@ -185,7 +185,7 @@ function moveLeft() {
 }
 
 function fire() {
-  bullets.value.push({
+  bullets.push({
     x: player.x + player.width / 2 - 2,
     y: player.y,
     width: 4,
@@ -193,10 +193,35 @@ function fire() {
   });
 }
 
+function checkCollisions() {
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const bullet = bullets[i];
+
+    for (let j = enemies.length - 1; j >= 0; j--) {
+      const enemy = enemies[j];
+      if (bullet && enemy) {
+        const hit =
+          bullet.x < enemy.x + enemy.width &&
+          bullet.x + bullet.width > enemy.x &&
+          bullet.y < enemy.y + enemy.height &&
+          bullet.y + bullet.height > enemy.y;
+
+        if (hit) {
+          bullets.splice(i, 1);
+          enemies.splice(j, 1);
+          break;
+        }
+      }
+
+    }
+  }
+}
+
 function gameLoop() {
   context.value?.clearRect(0, 0, canvasRef.value?.width ?? 320, canvasRef.value?.height ?? 320);
   updateBullets();
   updateEnemies();
+  checkCollisions();
   drawPlayer();
   drawBullets();
   drawEnemies();
