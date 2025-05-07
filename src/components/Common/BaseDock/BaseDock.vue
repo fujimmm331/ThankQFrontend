@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { links } from '@/consts/links';
 import BaseIcon from '../BaseIcon/BaseIcon.vue';
 import BaseDockButton from './BaseDockButton.vue';
 import type { GlobalDockProps } from './Type';
@@ -17,17 +18,22 @@ async function to(name: string) {
   }})
 }
 
+function onClickShare() {
+  window.open(links.lineRoom.url, '_blank')
+}
+
 </script>
 
 <template>
   <div class="dock w-full border-t-1 border-[#D1D5DB]">
-    <!-- <BaseDockButton
+    <BaseDockButton
       :current-path
       label="写真を共有する"
       to-path="/share"
-      @click="to('/share')"
+      @click="onClickShare"
     >
-    </BaseDockButton> -->
+      <BaseIcon icon="launch" />
+    </BaseDockButton>
 
     <BaseDockButton
       :current-path
