@@ -14,6 +14,7 @@ const store = useQuizStore();
 const route = useRoute();
 const router = useRouter();
 const sectionRef = useTemplateRef('baseSection');
+const transitionName = ref<'slide-left'|'slide-right'>('slide-left')
 
 const id = computed(() => {
   const _id = Number(route.params.id)
@@ -53,6 +54,7 @@ const radioItems = computed(() => {
 async function onNext() {
   const nextId = nextQuiz.value?.id;
   if (nextId) {
+    transitionName.value = 'slide-left'
     await router.push({
       name: 'questionAnswerPage',
       params: {
@@ -69,6 +71,7 @@ async function onPrev() {
   const prevId = prevQuiz.value?.id;
 
   if (prevId) {
+    transitionName.value = 'slide-right'
     await router.push({
       name: 'questionAnswerPage',
       params: {
@@ -117,23 +120,35 @@ watch(currentQuiz, () => {
         component="div"
         gap="xl"
       >
-        <BaseCenter
-          :col="false"
-          component="div"
-          grow
+        <Transition
+          mode="out-in"
+          :name="transitionName"
         >
-          <BaseHeading
-            class="py-8"
-            tag="h3"
+          <BaseCenter
+            :key="currentQuiz.id"
+            :col="false"
+            component="div"
+            grow
           >
-            Q. {{ currentQuiz.question }}
-          </BaseHeading>
-        </BaseCenter>
-        <BaseRadioGroup
-          v-model="currentQuiz.answer_id"
-          :disabled="status === 'done'"
-          :radio-items
-        />
+            <BaseHeading
+              class="py-8"
+              tag="h3"
+            >
+              Q. {{ currentQuiz.question }}
+            </BaseHeading>
+          </BaseCenter>
+        </Transition>
+        <Transition
+          mode="out-in"
+          :name="transitionName"
+        >
+          <BaseRadioGroup
+            v-model="currentQuiz.answer_id"
+            :key="currentQuiz.id"
+            :disabled="status === 'done'"
+            :radio-items
+          />
+        </Transition>
 
         <BaseCenter
           :col="false"
@@ -163,3 +178,30 @@ watch(currentQuiz, () => {
     </BaseStack>
   </BaseSection>
 </template>
+<style>
+/* --- Slide Left (Next) --- */
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-left-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* --- Slide Right (Prev) --- */
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-right-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+</style>
