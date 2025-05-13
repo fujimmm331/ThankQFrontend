@@ -5,6 +5,7 @@ import BaseIcon from '@/components/Common/BaseIcon/BaseIcon.vue';
 import BaseLink from '@/components/Common/BaseLink/BaseLink.vue';
 import BaseSection from '@/components/Common/BaseSection.vue';
 import BaseText from '@/components/Common/BaseText/BaseText.vue';
+import TypeWriter from '@/components/messages/TypeWriter/TypeWriter.vue';
 import { links } from '@/consts/links';
 import { getImagePath } from '@/utils/assetsPath';
 
@@ -26,7 +27,7 @@ import { getImagePath } from '@/utils/assetsPath';
         class="py-2 text-center"
         tag="h1"
       >
-        Thank you🎉
+        <TypeWriter text="Thank you🎉" />
       </BaseHeading>
 
       <BaseText>最後の問題は披露宴の後半に皆さんの前で実演します。</BaseText>
